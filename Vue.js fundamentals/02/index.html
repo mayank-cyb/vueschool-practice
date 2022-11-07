@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="shopping-list">
+        <h1>{{ header || 'Welcome' }}</h1>
+        <input type="text" placeholder="Add a new item" v-model.lazy="newItem">
+        <p>{{ newItem }}</p>
+        <!--link for keys used in list https://vueschool.io/articles/vuejs-tutorials/tips-and-gotchas-for-using-key-with-v-for-in-vue-js-3/-->
+        <!--v-for with array of objects ususal way-->
+        <ul>
+            <li v-for="item in items" :key="item.id">{{ item.label }}</li>
+        </ul>
+        <!--better way using destructuring -->
+        <!--ul>
+            <li v-for="{id, label} in items" :key="id">{{ label }}</li>
+        </ul-->
+        <!--index issues-->
+        <!--ul>
+            <li v-for="(item, index) in items" :key="index">{{ item.label }}</li>
+        </ul-->
+        <!--same as(so no use as Vue does the same by default under the hood)-->
+        <!--ul>
+            <li v-for="item in items">{{ item.label }}</li>
+        </ul-->
+        <!--v-for wit of with objects-->
+        <!--ul>
+            <li v-for="(item, key) in items" :key="key">{{ key }} {{ item.label }}</li>
+        </ul-->
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const shoppingList = Vue.createApp({
+            data() {
+                return {
+                    header: "Shopping list",
+                    items: [
+                        {id: 1, label: "Sunglass"},
+                        {id: 2, label: "Friut"},
+                        {id: 3, label: "Veggies"}
+                    ],
+                    newItem: null, 
+                    // items: {
+                    //     'item-1': {id: 1, label: "Sunglass"},
+                    //     'item-2': {id: 2, label: "Friut"},
+                    //     'item-3': {id: 3, label: "Veggies"}
+                    // }
+
+                }
+            },
+            methods: {
+                addItem(event) {
+                    this.item = this.event.target.value;
+                    this.items.push(this.item);
+                }
+            },
+        })
+        .mount('#shopping-list');
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form input bindings</title>
+</head>
+<body>
+    <div id="shopping-list">
+        <div class="header">
+            <h1>{{ header || 'Welcome' }}</h1>
+            <button v-if="editing" @click="doEdit(false)" class="btn btn-cancel">
+                Cancel
+            </button>
+            <button v-else @click="doEdit(true)" class="btn btn-add">
+                Add Item
+            </button>
+        </div>
+
+        <div v-if="editing" class="add-item-form">
+        <!--text-->
+            <input type="text" placeholder="Add a new item" v-model="newItem" @keyup.enter="saveItem">
+            <button
+                :disabled="newItem.length === 0 || newItem.length < 5"
+                @click="saveItem"
+            >
+            Save Item
+            </button>
+        <p>{{ newItem }}</p>
+        </div>
+        <p v-if="items.length === 0">Nice job! You have bought all your items!</p>
+        <ul>
+            <li v-for="item in items" :key="item.id">{{ item.label }}</li>
+        </ul>
+        <!--v-model modifiers:
+            lazy: shows the value on if input fields loses focus or is blurred
+            number: shows the o/p if it is a number as opposed to string / tests number   
+            trim: trims extra white space
+        -->
+        <!--link for keys used in list https://vueschool.io/articles/vuejs-tutorials/tips-and-gotchas-for-using-key-with-v-for-in-vue-js-3/-->
+        <!--stackblitz example https://stackblitz.com/edit/vue-3djhxq?file=src%2FApp.vue-->
+        <br /><br />
+
+        <!--radio-->
+        <label>
+            <input type="radio" v-model="newItemPriority" value="low">
+            Low
+        </label>
+        <label>
+            <input type="radio" v-model="newItemPriority" value="high">
+            High
+        </label>
+        <p>{{ newItemPriority }}</p>
+
+        <br /><br />
+        <!--select-->
+        <select v-model="newItemPriority">
+            <option value="low">Low</option>
+            <option value="high">High</option>
+        </select>
+
+        <br /><br />
+        <!--checkbox-->
+        <label>
+            <input type="checkbox" v-model="newItemHighPriority">
+        </label>
+        {{ newItemHighPriority }}
+
+        <br /><br />
+        <!--adding values to an array using checkbox-->
+        <label><input type="checkbox" value="Vanilla" v-model="iceCreamFlavors">Vanilla</label>
+        <label><input type="checkbox" value="Butterscotch" v-model="iceCreamFlavors">Butterscotch</label>
+        <label><input type="checkbox" value="Strawberry" v-model="iceCreamFlavors">Strawberry</label>
+        <label><input type="checkbox" value="Chocolate" v-model="iceCreamFlavors">Chocolate</label>
+        <p>{{ iceCreamFlavors }}</p>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const shoppingList = Vue.createApp({
+            data() {
+                return {
+                    header: "Shopping list App",
+                    items: [
+                            // {id: 1, label: "Sunglass"},
+                            // {id: 2, label: "Friut"},
+                            // {id: 3, label: "Veggies"}
+                    ],
+                    editing: false,
+                    newItem: '', 
+                    newItemPriority:'low',
+                    newItemHighPriority: false,
+                    iceCreamFlavors: [],
+                    // items: {
+                    //     'item-1': {id: 1, label: "Sunglass"},
+                    //     'item-2': {id: 2, label: "Friut"},
+                    //     'item-3': {id: 3, label: "Veggies"}
+                    // }
+
+                }
+            },
+            methods: {
+                saveItem() {
+                    console.log(this.newItem);
+                    if(this.newItem !== null || this.newItem != '') {
+                        console.log(this.newItem);
+                        console.log("new item is available to be added");
+                        this.items.push({id: this.items.length + 1, label: this.newItem});
+                        this.newItem = '';
+                    } else {
+                        return;
+                    }
+                },
+                doEdit(editing) {
+                    this.editing = editing;
+                    this.newItem = "";
+                }
+            },
+        })
+        .mount('#shopping-list');
+    </script>
+</body>
+</html>
